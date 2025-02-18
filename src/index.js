@@ -1,5 +1,17 @@
 import { createRandomNumber, checkGuess } from "./gameUtils.js";
-import { getUserInput } from "./inputUtils.js";
+import { getUserInput, readLineAsync } from "./inputUtils.js";
+
+async function askReplay() {
+    while (true) {
+        const input = await readLineAsync("게임을 다시 시작하시겠습니까? (yes/no): ");
+        if (input.toLowerCase() === "yes") return true;
+        if (input.toLowerCase() === "no") {
+            console.log("게임을 종료합니다.");
+            process.exit(0);
+        }
+        console.log("올바른 입력이 아닙니다. 'yes' 또는 'no'를 입력하세요.");
+    }
+}
 
 
 async function playGame() {
@@ -27,6 +39,7 @@ async function playGame() {
     if (currentTries === MAX_TRIES && previousGuesses[previousGuesses.length - 1] !== answer)
         console.log(`5회 초과! 숫자를 맞추지 못했습니다. (정답: ${answer})`);
 
+    if (await askReplay()) await playGame();
 }
 
 playGame();
