@@ -1,5 +1,5 @@
 import { createRandomNumber, checkGuess } from "./gameUtils.js";
-import { getUserInput, getMinMaxInput, readLineAsync } from "./inputUtils.js";
+import { getUserInput, getMinMaxInput, getMaxTries, readLineAsync } from "./inputUtils.js";
 
 async function askReplay() {
     while (true) {
