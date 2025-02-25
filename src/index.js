@@ -31,8 +31,9 @@ async function playGame() {
     console.log("게임 시작을 위해 진행 가능 횟수를 입력해주세요.");
     gameState.MAX_TRIES = await getMaxTries();
 
-    gameState.answer = createRandomNumber();
-    console.log("컴퓨터가 1~50 사이의 숫자를 선택했습니다. 숫자를 맞춰보세요.");
+    gameState.answer = createRandomNumber(gameState.min, gameState.max);
+    console.log(`컴퓨터가 ${gameState.min}~${gameState.max} 사이의 숫자를 선택했습니다. 숫자를 맞춰보세요.`);
+
 
     while (gameState.currentTries < gameState.MAX_TRIES) {
         const inputNum = await getUserInput();
