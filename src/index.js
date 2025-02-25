@@ -1,5 +1,5 @@
 import { createRandomNumber, checkGuess } from "./gameUtils.js";
-import { getUserInput, readLineAsync } from "./inputUtils.js";
+import { getUserInput, getMinMaxInput, readLineAsync } from "./inputUtils.js";
 
 async function askReplay() {
     while (true) {
@@ -16,17 +16,25 @@ async function askReplay() {
 }
 
 async function playGame() {
-    const MAX_TRIES = 5;
     const gameState = {
+        MAX_TRIES: 0,
+        min: 0,
+        max: 0,
         currentTries: 0,
         previousGuesses: [],
         answer: 0
     };
 
+    console.log("게임 시작을 위해 최소 값, 최대 값을 입력해주세요. (예: 1, 50) ");
+    [gameState.min, gameState.max] = await getMinMaxInput();
+
+    console.log("게임 시작을 위해 진행 가능 횟수를 입력해주세요.");
+    gameState.MAX_TRIES = await getMaxTries();
+
     gameState.answer = createRandomNumber();
     console.log("컴퓨터가 1~50 사이의 숫자를 선택했습니다. 숫자를 맞춰보세요.");
 
-    while (gameState.currentTries < MAX_TRIES) {
+    while (gameState.currentTries < gameState.MAX_TRIES) {
         const inputNum = await getUserInput();
         gameState.currentTries++;
         gameState.previousGuesses.push(inputNum);
