@@ -18,11 +18,10 @@ export function readLineAsync(query) {
     });
 }
 
-export async function getUserInput(min = 1, max = 50) {
+export async function getUserInput(min, max) {
     while (true) {
         const input = await readLineAsync("숫자 입력: ");
         const number = parseInt(input, 10);
-
         if (!isNaN(number) && number >= min && number <= max) {
             return number;
         }

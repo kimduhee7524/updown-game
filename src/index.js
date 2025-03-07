@@ -36,7 +36,7 @@ async function playGame() {
 
 
     while (gameState.currentTries < gameState.MAX_TRIES) {
-        const inputNum = await getUserInput();
+        const inputNum = await getUserInput(gameState.min, gameState.max);
         gameState.currentTries++;
         gameState.previousGuesses.push(inputNum);
 
@@ -49,7 +49,7 @@ async function playGame() {
         }
         console.log(`이전 추측: ${gameState.previousGuesses.join(", ")}`);
     }
-    console.log(`5회 초과! 숫자를 맞추지 못했습니다. (정답: ${gameState.answer})`);
+    console.log(`입력하신 ${gameState.MAX_TRIES}회 내에 숫자를 맞추지 못했습니다. (정답: ${gameState.answer})`);
 }
 
 async function main() {
