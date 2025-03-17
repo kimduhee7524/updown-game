@@ -12,7 +12,22 @@ class Game{
         this.maxTries = 0;
         this.currentTries = 0;
         this.previousGuesses = [];
+        this.isInitialized = false;
     }
+
+    async initializeGame() {
+        console.log("게임 시작을 위해 최소 값, 최대 값을 입력해주세요. (예: 1, 50) ");
+        [this.min, this.max] = await InputUtils.getMinMaxInput();
+    
+        console.log("게임 시작을 위해 진행 가능 횟수를 입력해주세요.");
+        this.maxTries = await InputUtils.getMaxTries();
+    
+        this.answer = GameUtils.createRandomNumber(this.min, this.max);
+        console.log(`컴퓨터가 ${this.min}~${this.max} 사이의 숫자를 선택했습니다. 숫자를 맞춰보세요.`);
+        
+        this.isInitialized = true;
+    }
+    
     async askReplay() {
         while (true) {
             const RESPONSES = { "yes": true, "no": false };
@@ -27,16 +42,9 @@ class Game{
     }
 
     async playGame() {
-
-        console.log("게임 시작을 위해 최소 값, 최대 값을 입력해주세요. (예: 1, 50) ");
-        [this.min, this.max] = await InputUtils.getMinMaxInput();
-    
-        console.log("게임 시작을 위해 진행 가능 횟수를 입력해주세요.");
-        this.maxTries = await InputUtils.getMaxTries();
-    
-        this.answer = GameUtils.createRandomNumber(this.min, this.max);
-        console.log(`컴퓨터가 ${this.min}~${this.max} 사이의 숫자를 선택했습니다. 숫자를 맞춰보세요.`);
-    
+        if (!this.isInitialized) {
+            await this.initializeGame();
+        }
     
         while (this.currentTries < this.maxTries) {
             const inputNum = await InputUtils.getUserInput(this.min, this.max);
@@ -54,16 +62,21 @@ class Game{
         }
         console.log(`입력하신 ${this.maxTries}회 내에 숫자를 맞추지 못했습니다. (정답: ${this.answer})`);
     }
+
+    async start() {
+        do {
+            this.resetGame();
+            await this.playGame();
+        } while (await this.askReplay()); 
+
+        console.log("게임을 종료합니다.");
+    }
+
 }
 
 async function main() {
     const game = new Game(); 
-    do {
-        game.resetGame();
-        await game.playGame();
-    } while (await game.askReplay()); 
-
-    console.log("게임을 종료합니다.");
+    game.start();
 }
 
 main();

@@ -35,10 +35,16 @@ export default class InputUtils {
             const input = await this.readLineAsync("최소값, 최대값을 입력하세요: ");
             const numbers = input.split(',').map(num => parseInt(num.trim(), 10));
 
+            if (min === max) {
+                console.log("최소값과 최대값이 같습니다. 다른 값을 입력해주세요.");
+                continue;
+            }
+
             if (numbers.length == 2) {
                 const [min, max] = numbers.sort((a, b) => a - b);
                 return [min, max];
             }
+            
             console.log("올바른 숫자를 입력하세요.");
         }
     }
@@ -48,7 +54,7 @@ export default class InputUtils {
             const input = await this.readLineAsync("최대 시도 횟수를 입력하세요: ");
             const number = parseInt(input, 10);
 
-            if (!isNaN(number)) {
+            if (!isNaN(number) && number > 0) {
                 return number;
             }
             console.log("올바른 숫자를 입력하세요.");
